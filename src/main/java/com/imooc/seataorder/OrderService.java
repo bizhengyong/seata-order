@@ -15,13 +15,17 @@ import org.springframework.web.client.RestTemplate;
 public class OrderService {
 
     @Autowired
-    private RestTemplate restTemplate;
+    private ProductFeignClient productFeignClient;
+
+//    @Autowired
+//    private RestTemplate restTemplate;
 
     @GlobalTransactional
     public Boolean create(Integer count){
         //调用product扣库存
-        String url = "http://localhost:8086/deduct?productId=5001&count="+count;
-        Boolean result = restTemplate.getForObject(url, Boolean.class);
+//        String url = "http://localhost:8086/deduct?productId=5001&count="+count;
+//        Boolean result = restTemplate.getForObject(url, Boolean.class);
+        Boolean result = productFeignClient.deduct(5001L, count);
         if (result != null && result) {
             //可能抛出异常
             if (5 == count) {
